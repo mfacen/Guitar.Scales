@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Launch CreateSequence",
+            "request": "launch",
+            "mainClass": "resources.CreateSequence",
+            "projectName": "Guitar.Scales_cffd10e4"
+        },
+        {
+            "type": "java",
+            "name": "Launch GuitarScales",
+            "request": "launch",
+            "mainClass": "resources.GuitarScales",
+            "projectName": "Guitar.Scales_cffd10e4"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch)",
+            "request": "launch",
+            "mainClass": "TestRun.java"
+        },
+        {
+            "type": "java",
+            "name": "Debug (Launch) - Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        }
+    ]
+}
