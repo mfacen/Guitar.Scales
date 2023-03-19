@@ -22,6 +22,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.prefs.Preferences;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
 
 import javax.sound.midi.Instrument;
 import javax.sound.midi.InvalidMidiDataException;
@@ -50,25 +52,29 @@ import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import javazoom.jl.player.advanced.jlap;
+
+//import javazoom.jl.player.Player;
+import java.io.File;
+
 
 public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener,ChangeListener,ItemListener, MetaEventListener{
 	static	Cuerda[] strings = new Cuerda[6];
 	public String[] ordenDeNotas = {"C ","C#","D ","D#","E ","F ","F#","G ","G#","A ","A#","B "};
-	public String[] grades = {"1 ","2-","2","m3","M3","4","4+","5","6","M6","m7","7 "};
+	public String[] grades = {"1 ","2-","2","m3","3","4","4+","5","6","M6","m7","7 "};
 	static int tonality=0;
 	static Escala scale;
 	static Escala[] scaleList = new Escala[13];
 	static Escala[] chordList = new Escala[10];
 	static Escala[] exeList = new Escala[11];
-	static Acorde[] fingeredList = new Acorde[3];
-	
+	Acorde[] fingeredList = new Acorde[3];
+	SavedTracks savedTracks;
 	static Sequencer mySequencer;
 	static Sequence sequence = null;
 	boolean flashNotes = false;		// Bool to tell the flash method when there is flashing.
 	boolean showNotes = false;
 	boolean showGrades = false;
-
-
+	
 	int flashNote = 0;				// The note beeing flashed
 	/**
 	 * 
@@ -98,7 +104,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 	JRadioButton radioShowNotes = new JRadioButton("Show Notes");
 	JRadioButton radioShowGrades = new JRadioButton("Show Scale Grades");
 	JRadioButton radioShowNone = new JRadioButton("Show None");
-	JCheckBox checkLockMask = new JCheckBox("Lock Mask");
+	JCheckBox checkLockMask = new JCheckBox("Unlock Mask");
 	ButtonGroup buttonGroup = new ButtonGroup();
 	JComboBox comboScales = new JComboBox();
 	JComboBox comboChords = new JComboBox();
@@ -107,9 +113,9 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 	JComboBox comboInstrument = new JComboBox();	
 	JComboBox comboNotes = new JComboBox();	
 	JLabel lblTonality = new JLabel();
-	JLabel lblScale = new JLabel();
+	JLabel lblScale = new JLabel("Scales:");
 	JLabel lblTempo = new JLabel("Tempo");
-	JLabel lblChords = new JLabel("Chords");
+	JLabel lblChords = new JLabel("Chords:");
 	JSlider sliderMaskMin = new JSlider(JSlider.HORIZONTAL, 0, 24, 0);
 	JSlider sliderMaskMax = new JSlider(JSlider.HORIZONTAL, 0, 24, 12);
 	JSlider sliderMaskOpacity = new JSlider(JSlider.HORIZONTAL, 0, 250, 30);
@@ -120,18 +126,18 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 
 
 	int playCount = 0;
-	static boolean flagFingered;
+	boolean flagFingered;
 	static Track track;
 
 
 
 
 	public GuitarScalesUI() {
-		
-		// TODO Auto-generated constructor stub
 		prefs = Preferences.userNodeForPackage(this.getClass());
+		addKeyListener(this);
 
-
+	//MP3Player mp3Player = new MP3Player("/home/mihel/Documents/Lecciones de Musica/12 blues tracks/12_bar_blues.mp3");
+	//mp3Player.play(150);
 		try {
 			Synthesizer midiSynth = MidiSystem.getSynthesizer(); 
 
@@ -281,17 +287,17 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 			e.printStackTrace();
 		}
 	}
-
-
-
+	
+	public static  int getTonality(){return tonality;}
+	
 	private void setUpComponents() {
 		// TODO Auto-generated method stub
 		
+		savedTracks = new SavedTracks(this);
 		Diapason diapason = new Diapason(this);
 		//diapason.setSize(800,300);
 		diapason.setVisible(true);
 		diapason.setBorder(etched);
-		addKeyListener(this);
 
 		
 		
@@ -327,6 +333,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		sliderMaskMax.addChangeListener(this);
 		sliderMaskMin.addChangeListener(this);
 		sliderMaskOpacity.addChangeListener(this);
+		sliderTempo.addChangeListener(this);
 		Border blackline = BorderFactory.createLineBorder(Color.lightGray);
 		//TitledBorder title = BorderFactory.createTitledBorder(blackline, "Mask Min");
 		//title.setTitleJustification(TitledBorder.CENTER);
@@ -339,6 +346,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		buttonGroup.add(radioShowNotes);
 		buttonGroup.add(radioShowNone);
 		JPanel panelRadio = new JPanel();
+		panelRadio.setLayout(new BoxLayout(panelRadio, BoxLayout.Y_AXIS));
 		panelRadio.add(radioShowGrades);
 		panelRadio.add(radioShowNotes);
 		panelRadio.add(radioShowNone);
@@ -362,9 +370,26 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		radioShowNotes.addActionListener(this);
 		radioShowNone.addActionListener(this);
 		
+		JPanel panelInstruments = new JPanel();
+		panelInstruments.add(new JLabel("Instrument:"));
+		panelInstruments.add(comboInstrument);
 		
-
-
+		JPanel panelTempo = new JPanel();
+		panelTempo.setLayout(new BoxLayout(panelTempo,BoxLayout.Y_AXIS));
+		panelTempo.add(new JLabel("Tempo"));
+		panelTempo.add(sliderTempo);
+		panelTempo.add(lblTempo);
+		panelTempo.add(checkLoop);//,BorderLayout.CENTER);
+		panelTempo.add(checkSwing);//,BorderLayout.PAGE_END);
+		panelTempo.add(checkMetronome);//,BorderLayout.PAGE_END);
+		
+				JPanel panelExe = new JPanel();
+				panelExe.add(btnPlayScale);//,BorderLayout.PAGE_START);
+				panelExe.setBorder(BorderFactory.createBevelBorder(20));
+				panelExe.setLayout(new BoxLayout(panelExe, BoxLayout.Y_AXIS));
+				panelExe.add(btnPlayExe);
+				panelExe.add(comboExersizes);
+				panelExe.add(savedTracks);
 		JPanel panelMask = new JPanel();
 		panelMask.setBorder(BorderFactory.createBevelBorder(20));
 		panelMask.setLayout(new FlowLayout());
@@ -372,23 +397,16 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		panelMask.add(sliderMaskMax,BorderLayout.LINE_END);
 		panelMask.add(sliderMaskOpacity,BorderLayout.PAGE_END);
 		panelMask.add(checkLockMask);
+		panelMask.setBorder(new BevelBorder(BevelBorder.RAISED));
 		JPanel panelPlay = new JPanel();
-		//panelPlay.setLayout(new GridLayout(4,1));
-		panelPlay.add(btnPlayScale);//,BorderLayout.PAGE_START);
-		panelPlay.add(checkLoop);//,BorderLayout.CENTER);
-		panelPlay.add(sliderTempo);//,BorderLayout.PAGE_END);
-		panelPlay.add(lblTempo);//,BorderLayout.PAGE_END);
-		panelPlay.add(checkSwing);//,BorderLayout.PAGE_END);
-		panelPlay.add(checkMetronome);//,BorderLayout.PAGE_END);
+		panelPlay.setLayout(new BoxLayout(panelPlay, BoxLayout.X_AXIS));
+		panelPlay.add(panelExe);
+		panelPlay.add(panelTempo);//,BorderLayout.PAGE_END);
+
 		panelPlay.add(panelRadio);
 		lblTempo.setFont(new Font("Serif", Font.PLAIN, 20));
 
 		//panelPlay.add(lblTempo,BorderLayout.PAGE_END);
-
-		JPanel panelExe = new JPanel();
-		panelExe.setBorder(BorderFactory.createBevelBorder(20));
-		panelExe.add(btnPlayExe);
-		panelExe.add(comboExersizes);
 
 
 		JPanel panelEast = new JPanel();
@@ -396,7 +414,6 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		JPanel panelNorth = new JPanel();
 		JPanel panelSouth = new JPanel();
 		JPanel panelCenter = new JPanel();
-
 		panelNorth.setLayout(new BoxLayout(panelNorth , BoxLayout.X_AXIS));
 		panelNorth.add(lblTonality);
 		panelNorth.add(btnDecreaseTonality);
@@ -405,21 +422,21 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		panelNorth.add(comboScales);
 		panelNorth.add(lblChords);
 		panelNorth.add(comboChords);
-		panelNorth.add(comboFingeredChord);
+		panelNorth.add(panelInstruments);
+		//panelNorth.add(comboFingeredChord);
 		
 		this.add(panelNorth,BorderLayout.PAGE_START);
 		
 		//panelSouth.setLayout((new FlowLayout()));
 		panelSouth.add(panelPlay);
-		panelSouth.add(panelExe);
 		panelNorth.setPreferredSize(new Dimension(1200,30));
 		this.add(panelSouth,BorderLayout.PAGE_END);
-		panelCenter.add(comboInstrument);
+		//panelCenter.add(panelInstruments);
 		panelCenter.add(diapason);
 		panelCenter.add(panelMask);
 		panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.Y_AXIS));
 		//panelSouth.setBorder(BorderFactory.createEmptyBorder(0, 0 , 20,  0));
-		panelSouth.setPreferredSize(new Dimension(1200,90));
+		panelSouth.setPreferredSize(new Dimension(1200,180));
 
 		this.add(panelCenter,BorderLayout.CENTER);
 		
@@ -440,8 +457,6 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		if (comboInstrument.getSelectedIndex()==1){strings_num=4;}
 		if (comboInstrument.getSelectedIndex()==2){strings_num=4;}
 		for ( int t=0; t<strings_num; t++) {
-			System.out.println(t);
-
 			strings[t].calculate(scale, tonality);
 		}
 	}
@@ -451,7 +466,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 
 		Escala.setExeMultiplier(1);		// las escalas no tienen espacios por ahora
 		scaleList[0]=new Escala("Major", "22122212212221");
-		scaleList[1]=new Escala( "Minor", "21221222122122");
+		scaleList[1]=new Escala( "Minor", "212212221221222122122");
 		scaleList[2]=new Escala( "Minor Harmonic", "21221312122131");
 		scaleList[3]=new Escala( "Minor Melodic", "21222212122221");
 		scaleList[4]=new Escala( "Pentatonic Major", "2232322323");
@@ -529,7 +544,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 			Diapason.setNumberOfStrings(4);
 		}	
 		else if (comboInstrument.getSelectedIndex()==2){   //UKELELE
-System.out.println("Ukelele");
+//System.out.println("Ukelele");
 			strings[0] = new Cuerda(9,"1st");
 			strings[1] = new Cuerda(4,"2nd");
 			strings[2] = new Cuerda(0,"3rd");
@@ -560,9 +575,9 @@ System.out.println("Ukelele");
 
 
 
-		sliderMaskMax.setValue(prefs.getInt("MASK_MAX", -1));
-		sliderMaskMin.setValue(prefs.getInt("MASK_MIN", -1));
-		sliderTempo.setValue(prefs.getInt("TEMPO", -1));
+		sliderMaskMax.setValue(prefs.getInt("MASK_MAX", 20));
+		sliderMaskMin.setValue(prefs.getInt("MASK_MIN", 0));
+		sliderTempo.setValue(prefs.getInt("TEMPO", 90));
 
 			//comboScales.setSelectedIndex(prefs.getInt("SCALE", -1));
 		int tempChord = prefs.getInt("CHORD", -1);
@@ -651,9 +666,7 @@ System.out.println("Ukelele");
 		return tempTrack;
 	}
 	public void keyPressed(KeyEvent key) {
-		// TODO Auto-generated method stub
-		//this.setLocation(200,3);
-		//System.out.println(key.getKeyCode());
+		System.out.println(key.getKeyCode());
 		if (key.getKeyCode() == 37){
 			FRET_SIZE-=2;
 			repaint();
@@ -673,9 +686,22 @@ System.out.println("Ukelele");
 		// TODO Auto-generated method stub
 
 	}
-	public void keyTyped(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-
+	public void keyTyped(KeyEvent key) {
+		System.out.println(key.getKeyCode());
+		if (key.getKeyCode() == 37){
+			FRET_SIZE-=2;
+			repaint();
+		}
+		if (key.getKeyCode() == 39){
+			FRET_SIZE+=2;
+			repaint();
+		}		if (key.getKeyCode() == 38){
+			STRING_SEPARATION-=2;
+			repaint();
+		}		if (key.getKeyCode() == 40){
+			STRING_SEPARATION+=2;
+			repaint();
+		}
 	}
 
 
@@ -683,23 +709,14 @@ System.out.println("Ukelele");
 		//System.out.println("action");
 		// TODO Auto-generated method stub
 
-		if (e.getSource().equals(btnIncreaseTonality)){
-			tonality = (tonality +1) % 12;
-			if (!checkLockMask.isSelected()){
-				sliderMaskMax.setValue((sliderMaskMax.getValue()+1)%24);
-				sliderMaskMin.setValue((sliderMaskMin.getValue()+1)%24);
-			}
-			savePreferences();
-			calculate();
-			repaint();
-		}
+
 
 		if (e.getSource().equals(btnDecreaseTonality)){
 			System.out.println("btn-");
 
 			tonality--;
 			if (tonality<0){tonality=11;}
-			if (!checkLockMask.isSelected()){
+			if (checkLockMask.isSelected()){
 				sliderMaskMax.setValue((sliderMaskMax.getValue()-1)%24);
 				sliderMaskMin.setValue((sliderMaskMin.getValue()-1)%24);
 			} 
@@ -708,7 +725,20 @@ System.out.println("Ukelele");
 
 			repaint();
 		}
+		if (e.getSource().equals(btnIncreaseTonality)){
+			System.out.println("btn-");
 
+			tonality++;
+			if (tonality>11){tonality=0;}
+			if (checkLockMask.isSelected()){
+				sliderMaskMax.setValue((sliderMaskMax.getValue()+1)%24);
+				sliderMaskMin.setValue((sliderMaskMin.getValue()+1)%24);
+			} 
+			calculate();
+			savePreferences();
+
+			repaint();
+		}
 
 		if (e.getSource().equals(btnPlayScale)) {
 			clearTrack();
@@ -719,8 +749,9 @@ System.out.println("Ukelele");
 				System.out.println(60+tonality+scale.pattern[i]);
 				i++;
 				System.out.println();
-
 			}
+			//track.add(createNoteOnEvent(60+tonality+scale.pattern[i],i*SIXTEENTH_NOTE + SIXTEENTH_NOTE/2, SIXTEENTH_NOTE/2 , 0));
+			   // note , tick , duration in ticks , channel
 			if ( checkMetronome.isSelected() ) {trackAddMetronome(track,8);}
 
 			mySequencer.setTickPosition(0);
@@ -739,7 +770,7 @@ System.out.println("Ukelele");
 				System.out.print(i+" - ");
 				String tempChar = Character.toString(exeList[comboExersizes.getSelectedIndex()].literal.charAt(i*2+1));
 				int noteTemp = tonality+scale.pattern[Integer.parseInt(Character.toString(exeList[comboExersizes.getSelectedIndex()].literal.charAt(i*2)))-1];
-				System.out.println("NoteTemp:"+noteTemp+"  -  TempChar:"+tempChar);
+				//System.out.println("NoteTemp:"+noteTemp+"  -  TempChar:"+tempChar);
 
 				
 				if (   (checkSwing.isSelected()) && (i%2!=0) ) {
@@ -776,8 +807,14 @@ System.out.println("Ukelele");
 	   }
 		if (e.getSource().equals(checkLockMask)){
 			savePreferences();
-	   repaint();
    }
+   if (e.getSource().equals(checkLoop)){
+	   if(!checkLoop.isSelected()) {
+		   mySequencer.stop();
+		   repaint();
+	   }
+	savePreferences();
+}
 	   if (e.getSource().equals(comboInstrument)){
 		createStrings();
 		calculate();
@@ -793,8 +830,14 @@ System.out.println("Ukelele");
 		if (e.getSource().equals(comboExersizes)){
 
 		}
+		if (e.getSource().equals(sliderMaskMax) || e.getSource().equals(sliderMaskMin)){
+			savePreferences();
+			repaint();
+		} 
+
 		if (e.getSource().equals(sliderTempo)) {
 			repaint();
+			lblTempo.setText(String.valueOf( sliderTempo.getValue()));
 			if (mySequencer != null) mySequencer.setTempoInBPM(sliderTempo.getValue());
 		}
 		if (e.getSource().equals(comboInstrument)){

@@ -1,9 +1,6 @@
 {
-    "java.project.referencedLibraries": {
-        "include": [
-            "lib/**/*.jar"
-        ],
-        "exclude": [
-        ]
-    }
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "bin/resources/jlayer-1.0.1.jar"
+    ]
 }

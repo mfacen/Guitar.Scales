@@ -4,19 +4,23 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "java",
             "name": "Launch CreateSequence",
             "request": "launch",
             "mainClass": "resources.CreateSequence",
-            "projectName": "Guitar.Scales_cffd10e4"
+            "projectName": "Guitar.Scales_cffd10e4",
+            //"vmArgs": "--module-path /home/mihel/Downloads/Software/javafx-sdk-19.0.2.1 --add-modules javafx.controls,javafx.fxml",
+
         },
         {
             "type": "java",
             "name": "Launch GuitarScales",
             "request": "launch",
             "mainClass": "resources.GuitarScales",
-            "projectName": "Guitar.Scales_cffd10e4"
+            "projectName": "Guitar.Scales_cffd10e4",
+            //"vmArgs": "--module-path /home/mihel/Downloads/Software/javafx-sdk-19.0.2.1 --add-modules javafx.controls,javafx.fxml",
         },
         {
             "type": "java",
