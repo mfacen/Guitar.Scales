@@ -57,7 +57,6 @@ import javazoom.jl.player.advanced.jlap;
 //import javazoom.jl.player.Player;
 import java.io.File;
 
-
 public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener,ChangeListener,ItemListener, MetaEventListener{
 	static	Cuerda[] strings = new Cuerda[6];
 	public String[] ordenDeNotas = {"C ","C#","D ","D#","E ","F ","F#","G ","G#","A ","A#","B "};
@@ -389,7 +388,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 				panelExe.setLayout(new BoxLayout(panelExe, BoxLayout.Y_AXIS));
 				panelExe.add(btnPlayExe);
 				panelExe.add(comboExersizes);
-				panelExe.add(savedTracks);
+				//panelExe.add(savedTracks);
 		JPanel panelMask = new JPanel();
 		panelMask.setBorder(BorderFactory.createBevelBorder(20));
 		panelMask.setLayout(new FlowLayout());
@@ -439,6 +438,11 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		panelSouth.setPreferredSize(new Dimension(1200,180));
 
 		this.add(panelCenter,BorderLayout.CENTER);
+
+		//panelExe.setBackground(new Color(200, 140, 230));
+		//panelSouth.setBackground(new Color(200, 140, 230));
+		//panelPlay.setBackground(new Color(200, 140, 230));
+		//panelSouth.setForeground(new Color(140, 220, 200));
 		
 	}
 
