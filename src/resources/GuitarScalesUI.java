@@ -23,8 +23,11 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.prefs.Preferences;
 import java.io.BufferedInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.FileInputStream;
 
+import javax.annotation.processing.Filer;
 import javax.sound.midi.Instrument;
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MetaEventListener;
@@ -498,11 +501,12 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		Escala.setExeMultiplier(2); // antes de cargar los ejercicios lo pongo en 2 para contar los espacios donde pongo datos
 		String line = null;
 		try {
-			File fileExeNames = new File("src/resources/ExeNames.txt");
-			File fileExeData = new File("src/resources/ExeDataSpace.txt");
+			InputStream instr = GuitarScales.class.getResourceAsStream("ExeNames.txt");
+			InputStream instr1 = GuitarScales.class.getResourceAsStream("ExeDataSpace.txt");
+			//FileReader fi = new FileReader(instr);
+			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(instr));
+			BufferedReader bufferedReader1 = new BufferedReader(new InputStreamReader(instr1));
 
-			BufferedReader bufferedReader = new BufferedReader (new FileReader(fileExeNames));
-			BufferedReader bufferedReader1 = new BufferedReader (new FileReader(fileExeData));
 			int i=0;
 			while((line = bufferedReader.readLine()) != null) {
 				exeList[i] = new Escala (line,bufferedReader1.readLine()); 
