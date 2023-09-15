@@ -51,7 +51,6 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JSlider;
 import javax.swing.Timer;
-import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -68,15 +67,10 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 	static Escala scale;
 	static Escala[] scaleList = new Escala[13];
 	static Escala[] chordList = new Escala[10];
-<<<<<<< HEAD
 	static Escala[] exeList = new Escala[13]; //ATENCION AQUI SI NO TIENE el numero justo no fucniona
 	static Acorde[] fingeredList = new Acorde[3];
-	
-=======
-	static Escala[] exeList = new Escala[11];
-	Acorde[] fingeredList = new Acorde[3];
-	SavedTracks savedTracks;
->>>>>>> refs/remotes/origin/master
+		SavedTracks savedTracks;
+
 	static Sequencer mySequencer;
 	static Sequence sequence = null;
 	boolean flashNotes = false;		// Bool to tell the flash method when there is flashing.
@@ -472,11 +466,6 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		if (comboInstrument.getSelectedIndex()==1){strings_num=4;}
 		if (comboInstrument.getSelectedIndex()==2){strings_num=4;}
 		for ( int t=0; t<strings_num; t++) {
-<<<<<<< HEAD
-			//System.out.println(t);
-
-=======
->>>>>>> refs/remotes/origin/master
 			strings[t].calculate(scale, tonality);
 		}
 	}
@@ -791,14 +780,9 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 				System.out.print(i+" - ");
 				String tempChar = Character.toString(exeList[comboExersizes.getSelectedIndex()].literal.charAt(i*2+1));
 				int noteTemp = tonality+scale.pattern[Integer.parseInt(Character.toString(exeList[comboExersizes.getSelectedIndex()].literal.charAt(i*2)))-1];
-<<<<<<< HEAD
 				System.out.println("NoteTemp:"+noteTemp+"  -  TempChar:"+tempChar);
 				if (tempChar.equals ("U")) noteTemp+=12;
 				if (tempChar.equals ("D")) noteTemp-=12;
-=======
-				//System.out.println("NoteTemp:"+noteTemp+"  -  TempChar:"+tempChar);
-
->>>>>>> refs/remotes/origin/master
 				
 				if (   (checkSwing.isSelected()) && (i%2!=0) ) {
 					track.add(createNoteOnEvent(60+noteTemp,i*SIXTEENTH_NOTE + SIXTEENTH_NOTE/3, SIXTEENTH_NOTE/2 , 0));   // note , tick , duration in ticks , channel
