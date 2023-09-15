@@ -7,7 +7,7 @@ public class Cuerda {
 
 int stringTone;
 String stringName;
-int[] frets = new int [100];
+int[] frets = new int [50];
 
 
 Cuerda (int t, String n){

@@ -3,7 +3,11 @@ package resources;
 public class Escala {
 	public String scaleName;
 	public String literal;  // example '2212221"
+<<<<<<< HEAD
 	int[] pattern = new int[30];
+=======
+	int[] pattern = new int[31];
+>>>>>>> refs/remotes/origin/master
 	static int exeMultiplier;
 	Escala (String name, String literal ){
 		this.scaleName = name;
@@ -11,7 +15,11 @@ public class Escala {
 		//System.out.println(name+" "+literal);
 
 		int sum = 0;
+<<<<<<< HEAD
 		for (int g=0; g<29; g++){
+=======
+		for (int g=0; g<30; g++){
+>>>>>>> refs/remotes/origin/master
 			this.pattern[g] = sum;
 
 	//		sum = sum +	Integer.parseInt( this.literal.substring(g % literal.length(), g % literal.length()+1)) % this.literal.length();
@@ -27,7 +35,7 @@ public class Escala {
 	}
 
 	void printChars (){
-		for (int g=0; g<20; g++){
+		for (int g=0; g<30; g++){
 			System.out.print(pattern[g]+":" );
 		}
 		

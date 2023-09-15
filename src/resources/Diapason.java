@@ -28,7 +28,7 @@ class Diapason extends JPanel{									//CLASE DIAPASON
 	
 		@Override
 	    public Dimension getPreferredSize() {
-	        return new Dimension(250,200);
+	        return new Dimension(250,220);
 	    }
 		
 		
@@ -55,7 +55,7 @@ class Diapason extends JPanel{									//CLASE DIAPASON
 
 		for (int c=0; c<numOfStrings ; c++ ){
 			g.setStroke(new BasicStroke(4-(numOfStrings-c)/2+1));
-			g.drawLine(this.guitarScalesUI.X_OFFSET,c*this.guitarScalesUI.STRING_SEPARATION+this.guitarScalesUI.Y_OFFSET-((0)),1000,c*this.guitarScalesUI.STRING_SEPARATION+this.guitarScalesUI.Y_OFFSET-((0)));
+			g.drawLine(this.guitarScalesUI.X_OFFSET,c*this.guitarScalesUI.STRING_SEPARATION+this.guitarScalesUI.Y_OFFSET-((0)),guitarScalesUI.getWidth(),c*this.guitarScalesUI.STRING_SEPARATION+this.guitarScalesUI.Y_OFFSET-((0)));
 			g.setStroke(new BasicStroke(1));
 
 			for ( int t=0 ; t < 24 ;t++  ){
@@ -73,7 +73,7 @@ class Diapason extends JPanel{									//CLASE DIAPASON
 					if (GuitarScalesUI.strings[c].frets[t] % 12 == 11){g.setColor( Color.magenta);}		// Major 7th
 					
 			// FLASH NOTE
-					if ( (GuitarScalesUI.strings[c].frets[t] % 12 == GuitarScalesUI.tonality + this.guitarScalesUI.flashNote) && 
+					if ( (GuitarScalesUI.strings[c].frets[t] % 12 == GuitarScalesUI.getTonality() + this.guitarScalesUI.flashNote) && 
 						 (this.guitarScalesUI.flashNotes == true)){ //    if flashnotes = true and note = flashnote
 						  if (t >= this.guitarScalesUI.sliderMaskMin.getValue()&&
 						 (t <= this.guitarScalesUI.sliderMaskMax.getValue() ))     //  if in bounds of Mask flash note.
