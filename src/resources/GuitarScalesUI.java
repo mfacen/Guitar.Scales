@@ -59,7 +59,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 	static Escala scale;
 	static Escala[] scaleList = new Escala[13];
 	static Escala[] chordList = new Escala[10];
-	static Escala[] exeList = new Escala[11];
+	static Escala[] exeList = new Escala[13]; //ATENCION AQUI SI NO TIENE el numero justo no fucniona
 	static Acorde[] fingeredList = new Acorde[3];
 	
 	static Sequencer mySequencer;
@@ -185,7 +185,9 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		}
 		
 		for (int i=0; i<exeList.length ; i++){
+			if (exeList[i].scaleName!=null) {
 			comboExersizes.addItem(exeList[i].scaleName);
+			}
 		}
 		Finger[] fingers = new Finger[4];
 		fingers[0] = new Finger (2,1,1);
@@ -440,7 +442,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		if (comboInstrument.getSelectedIndex()==1){strings_num=4;}
 		if (comboInstrument.getSelectedIndex()==2){strings_num=4;}
 		for ( int t=0; t<strings_num; t++) {
-			System.out.println(t);
+			//System.out.println(t);
 
 			strings[t].calculate(scale, tonality);
 		}
@@ -487,7 +489,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 			int i=0;
 			while((line = bufferedReader.readLine()) != null) {
 				exeList[i] = new Escala (line,bufferedReader1.readLine()); 
-				//System.out.println(exeList[i].scaleName);
+				System.out.println(exeList[i].scaleName);
 
 				i++;
 			} 
@@ -740,7 +742,8 @@ System.out.println("Ukelele");
 				String tempChar = Character.toString(exeList[comboExersizes.getSelectedIndex()].literal.charAt(i*2+1));
 				int noteTemp = tonality+scale.pattern[Integer.parseInt(Character.toString(exeList[comboExersizes.getSelectedIndex()].literal.charAt(i*2)))-1];
 				System.out.println("NoteTemp:"+noteTemp+"  -  TempChar:"+tempChar);
-
+				if (tempChar.equals ("U")) noteTemp+=12;
+				if (tempChar.equals ("D")) noteTemp-=12;
 				
 				if (   (checkSwing.isSelected()) && (i%2!=0) ) {
 					track.add(createNoteOnEvent(60+noteTemp,i*SIXTEENTH_NOTE + SIXTEENTH_NOTE/3, SIXTEENTH_NOTE/2 , 0));   // note , tick , duration in ticks , channel
@@ -796,6 +799,7 @@ System.out.println("Ukelele");
 		if (e.getSource().equals(sliderTempo)) {
 			repaint();
 			if (mySequencer != null) mySequencer.setTempoInBPM(sliderTempo.getValue());
+			lblTempo.setText(String.valueOf(sliderTempo.getValue()));
 		}
 		if (e.getSource().equals(comboInstrument)){
 			createStrings();

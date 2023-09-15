@@ -77,7 +77,7 @@ static Escala[] escalaList = new Escala[20];
 	    myWindow.getContentPane().add(guitarGui,BorderLayout.CENTER);
 	    myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    
-		myWindow.setSize(1000,500);
+		myWindow.setSize(1000,550);
 		myWindow.setVisible(true);		
 		myWindow.add(guitarGui);
 		//guitarGui.requestFocus();

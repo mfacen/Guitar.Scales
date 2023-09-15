@@ -6,6 +6,27 @@
     "configurations": [
         {
             "type": "java",
+            "name": "TestRun",
+            "request": "launch",
+            "mainClass": "resources.TestRun",
+            "projectName": "Guitar.Scales_ed4feedf"
+        },
+        {
+            "type": "java",
+            "name": "Launch CreateSequence",
+            "request": "launch",
+            "mainClass": "resources.CreateSequence",
+            "projectName": "Guitar.Scales_ed4feedf"
+        },
+        {
+            "type": "java",
+            "name": "Launch GuitarScales",
+            "request": "launch",
+            "mainClass": "resources.GuitarScales",
+            "projectName": "Guitar.Scales_ed4feedf"
+        },
+        {
+            "type": "java",
             "name": "Launch CreateSequence",
             "request": "launch",
             "mainClass": "resources.CreateSequence",

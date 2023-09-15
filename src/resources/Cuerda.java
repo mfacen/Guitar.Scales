@@ -19,7 +19,7 @@ public void calculate (Escala scale, int tonality){
 	//System.out.println(stringName+" "+ordenDeNotas[stringTone]);
 	//pattern = new int[51];
 	Arrays.fill(frets,-1);
-	for (int t=0;t<20; t++){
+	for (int t=0;t<scale.pattern.length; t++){
 		if ( (scale.pattern[t] + tonality) >= stringTone){
 		int fret = ( scale.pattern[t] + tonality - (stringTone)-12 ) ;	// PROBLEMA
 		if ( fret > -1 ) {										// Cuando tonality es alto fret no pasa por los trastes bajos...

@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.awt.*;
 
 import javax.swing.JPanel;
 
@@ -106,6 +107,7 @@ class Diapason extends JPanel{									//CLASE DIAPASON
 							if (  ( t < this.guitarScalesUI.sliderMaskMin.getValue() )   ||    ( t > this.guitarScalesUI.sliderMaskMax.getValue()  )   ){ // If out of bounds from mask 
 								g.setColor(new Color(g.getColor().getRed(),g.getColor().getGreen(),g.getColor().getBlue(),this.guitarScalesUI.sliderMaskOpacity.getValue()));// darken up
 							}
+							g.setFont(new Font("default", Font.BOLD, 12));
 							g.drawString(this.guitarScalesUI.ordenDeNotas [GuitarScalesUI.strings[c].frets[t] % 12],
 									t * this.guitarScalesUI.FRET_SIZE
 									- this.guitarScalesUI.FRET_SIZE / 2
@@ -113,11 +115,13 @@ class Diapason extends JPanel{									//CLASE DIAPASON
 									+ this.guitarScalesUI.X_OFFSET,
 									c * this.guitarScalesUI.STRING_SEPARATION
 									+ this.guitarScalesUI.Y_OFFSET
-									+ (this.guitarScalesUI.CIRCLE_SIZE / 2));
+									+ (this.guitarScalesUI.CIRCLE_SIZE / 2) - 2);
 						}
 						// SHOW SCALE GRADES
 						if ( this.guitarScalesUI.showGrades ){
 							g.setColor(Color.WHITE);
+							g.setFont(new Font("default", Font.BOLD, 12));
+
 							// APPLY MASK
 							if (  ( t < this.guitarScalesUI.sliderMaskMin.getValue() )   ||    ( t > this.guitarScalesUI.sliderMaskMax.getValue()  )   ){ // If out of bounds from mask 
 								g.setColor(new Color(g.getColor().getRed(),g.getColor().getGreen(),g.getColor().getBlue(),this.guitarScalesUI.sliderMaskOpacity.getValue()));// darken up
