@@ -62,18 +62,18 @@ class Diapason extends JPanel{									//CLASE DIAPASON
 				
 				g.drawLine(t*this.guitarScalesUI.FRET_SIZE+this.guitarScalesUI.X_OFFSET, this.guitarScalesUI.Y_OFFSET, t*this.guitarScalesUI.FRET_SIZE+this.guitarScalesUI.X_OFFSET, this.guitarScalesUI.Y_OFFSET + this.guitarScalesUI.STRING_SEPARATION * (numOfStrings-1));
 				//g.drawLine(fretPosition(t), Y_OFFSET, fretPosition(t), Y_OFFSET + STRING_SEPARATION * 5);
-				if (GuitarScalesUI.strings[c].frets[t] != -1){
+				if (this.guitarScalesUI.strings[c].frets[t] != -1){
 					g.setColor(new Color(30,30,30));
 			//SELECT COLOR
-					if (GuitarScalesUI.strings[c].frets[t] % 12 == 0){g.setColor( Color.red);}		// Root
-					if (GuitarScalesUI.strings[c].frets[t] % 12 == 4){g.setColor( Color.orange);}	// Major 3rd
-					if (GuitarScalesUI.strings[c].frets[t] % 12 == 3){g.setColor( Color.orange);}	// Minor 3rd
-					if (GuitarScalesUI.strings[c].frets[t] % 12 == 7){g.setColor( Color.blue);}		// Fifth
-					if (GuitarScalesUI.strings[c].frets[t] % 12 == 10){g.setColor( Color.magenta);}		// Minor 7th
-					if (GuitarScalesUI.strings[c].frets[t] % 12 == 11){g.setColor( Color.magenta);}		// Major 7th
+					if (this.guitarScalesUI.strings[c].frets[t] % 12 == 0){g.setColor( Color.red);}		// Root
+					if (this.guitarScalesUI.strings[c].frets[t] % 12 == 4){g.setColor( Color.orange);}	// Major 3rd
+					if (this.guitarScalesUI.strings[c].frets[t] % 12 == 3){g.setColor( Color.orange);}	// Minor 3rd
+					if (this.guitarScalesUI.strings[c].frets[t] % 12 == 7){g.setColor( Color.blue);}		// Fifth
+					if (this.guitarScalesUI.strings[c].frets[t] % 12 == 10){g.setColor( Color.magenta);}		// Minor 7th
+					if (this.guitarScalesUI.strings[c].frets[t] % 12 == 11){g.setColor( Color.magenta);}		// Major 7th
 					
 			// FLASH NOTE
-					if ( (GuitarScalesUI.strings[c].frets[t] % 12 == GuitarScalesUI.getTonality() + this.guitarScalesUI.flashNote) && 
+					if ( (this.guitarScalesUI.strings[c].frets[t] % 12 == this.guitarScalesUI.getTonality() + this.guitarScalesUI.flashNote) && 
 						 (this.guitarScalesUI.flashNotes == true)){ //    if flashnotes = true and note = flashnote
 						  if (t >= this.guitarScalesUI.sliderMaskMin.getValue()&&
 						 (t <= this.guitarScalesUI.sliderMaskMax.getValue() ))     //  if in bounds of Mask flash note.
@@ -108,7 +108,7 @@ class Diapason extends JPanel{									//CLASE DIAPASON
 								g.setColor(new Color(g.getColor().getRed(),g.getColor().getGreen(),g.getColor().getBlue(),this.guitarScalesUI.sliderMaskOpacity.getValue()));// darken up
 							}
 							g.setFont(new Font("default", Font.BOLD, 12));
-							g.drawString(this.guitarScalesUI.ordenDeNotas [GuitarScalesUI.strings[c].frets[t] % 12],
+							g.drawString(this.guitarScalesUI.ordenDeNotas [this.guitarScalesUI.strings[c].frets[t] % 12],
 									t * this.guitarScalesUI.FRET_SIZE
 									- this.guitarScalesUI.FRET_SIZE / 2
 									- (this.guitarScalesUI.CIRCLE_SIZE / 4)
@@ -126,7 +126,7 @@ class Diapason extends JPanel{									//CLASE DIAPASON
 							if (  ( t < this.guitarScalesUI.sliderMaskMin.getValue() )   ||    ( t > this.guitarScalesUI.sliderMaskMax.getValue()  )   ){ // If out of bounds from mask 
 								g.setColor(new Color(g.getColor().getRed(),g.getColor().getGreen(),g.getColor().getBlue(),this.guitarScalesUI.sliderMaskOpacity.getValue()));// darken up
 							}
-							int grade = GuitarScalesUI.strings[c].frets[t] % 12 - guitarScalesUI.tonality;
+							int grade = this.guitarScalesUI.strings[c].frets[t] % 12 - guitarScalesUI.tonality;
 							g.drawString(this.guitarScalesUI.grades[grade],
 									t * this.guitarScalesUI.FRET_SIZE
 									- this.guitarScalesUI.FRET_SIZE / 2

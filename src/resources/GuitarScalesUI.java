@@ -61,15 +61,15 @@ import javazoom.jl.player.advanced.jlap;
 import java.io.File;
 
 public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener,ChangeListener,ItemListener, MetaEventListener{
-	static	Cuerda[] strings = new Cuerda[6];
+	public	Cuerda[] strings = new Cuerda[6];
 	public String[] ordenDeNotas = {"C ","C#","D ","D#","E ","F ","F#","G ","G#","A ","A#","B "};
 	public String[] grades = {"1 ","2-","2","m3","3","4","4+","5","6","M6","m7","7 "};
-	static int tonality=0;
-	static Escala scale;
-	static Escala[] scaleList = new Escala[13];
-	static Escala[] chordList = new Escala[10];
-	static Escala[] exeList = new Escala[13]; //ATENCION AQUI SI NO TIENE el numero justo no fucniona
-	static Acorde[] fingeredList = new Acorde[3];
+	public int tonality=0;
+	public Escala scale;
+	public Escala[] scaleList = new Escala[13];
+	public Escala[] chordList = new Escala[10];
+	public Escala[] exeList = new Escala[13]; //ATENCION AQUI SI NO TIENE el numero justo no fucniona
+	public Acorde[] fingeredList = new Acorde[3];
 		SavedTracks savedTracks;
 
 	static Sequencer mySequencer;
@@ -182,7 +182,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		comboInstrument.addItem("Bass");
 		comboInstrument.addItem("Ukelele");
 		createScales();
-		GuitarScalesUI.scale = scaleList[tonality];
+		scale = scaleList[tonality];
 		createStrings();
 		
 		for (int i=0; i<chordList.length ; i++){
@@ -293,7 +293,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		}
 	}
 	
-	public static  int getTonality(){return tonality;}
+	public   int getTonality(){return tonality;}
 	
 	private void setUpComponents() {
 		// TODO Auto-generated method stub
