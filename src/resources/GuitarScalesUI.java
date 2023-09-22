@@ -25,6 +25,7 @@ import java.util.prefs.Preferences;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.file.FileSystemException;
 import java.io.FileInputStream;
 
 import javax.annotation.processing.Filer;
@@ -299,7 +300,7 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		
 		savedTracks = new SavedTracks(this);
 		Diapason diapason = new Diapason(this);
-		//diapason.setSize(800,300);
+		//diapason.setSize(800,500);
 		diapason.setVisible(true);
 		diapason.setBorder(etched);
 
@@ -438,6 +439,8 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 		//panelCenter.add(panelInstruments);
 		panelCenter.add(diapason);
 		panelCenter.add(panelMask);
+		panelCenter.setPreferredSize(new Dimension(1200,360));
+
 		panelCenter.setLayout(new BoxLayout(panelCenter, BoxLayout.Y_AXIS));
 		//panelSouth.setBorder(BorderFactory.createEmptyBorder(0, 0 , 20,  0));
 		panelSouth.setPreferredSize(new Dimension(1200,180));
@@ -511,10 +514,17 @@ public class GuitarScalesUI extends JPanel implements KeyListener,ActionListener
 
 			int i=0;
 			while((line = bufferedReader.readLine()) != null) {
+				try{
 				exeList[i] = new Escala (line,bufferedReader1.readLine()); 
-				System.out.println(exeList[i].scaleName);
+				//System.out.println(exeList[i].scaleName);
 
 				i++;
+				}
+				catch(FileSystemException e){
+					System.out.println("Error reading file");
+					e.printStackTrace();
+				}
+
 			} 
 
 		} catch (FileNotFoundException e) {

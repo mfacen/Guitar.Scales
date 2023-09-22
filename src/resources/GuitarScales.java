@@ -55,7 +55,7 @@ public class GuitarScales implements ActionListener{
 	    myWindow.getContentPane().add(guitarGui,BorderLayout.CENTER);
 	    myWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    
-		myWindow.setSize(1000,650);
+		//myWindow.setSize(1000,650);
 		myWindow.setVisible(true);	
 		myWindow.pack();
 

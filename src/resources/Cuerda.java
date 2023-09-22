@@ -24,7 +24,7 @@ public void calculate (Escala scale, int tonality){
 		int fret = ( scale.pattern[t] + tonality - (stringTone)-12 ) ;	// PROBLEMA
 		if ( fret > -1 && fret<frets.length) {										// Cuando tonality es alto fret no pasa por los trastes bajos...
 			frets[fret] = scale.pattern[t];
-			System.out.print(fret+" "+scale.pattern.length+" "+fret+"\n");
+			//System.out.print(fret+" "+scale.pattern.length+" "+fret+"\n");
 		}
 		}
 	}
