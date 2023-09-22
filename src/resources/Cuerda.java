@@ -7,7 +7,7 @@ public class Cuerda {
 
 int stringTone;
 String stringName;
-int[] frets = new int [50];
+int[] frets = new int [70];
 
 
 Cuerda (int t, String n){
@@ -22,9 +22,9 @@ public void calculate (Escala scale, int tonality){
 	for (int t=0;t<scale.pattern.length; t++){
 		if ( (scale.pattern[t] + tonality) >= stringTone){
 		int fret = ( scale.pattern[t] + tonality - (stringTone)-12 ) ;	// PROBLEMA
-		if ( fret > -1 ) {										// Cuando tonality es alto fret no pasa por los trastes bajos...
+		if ( fret > -1 && fret<frets.length) {										// Cuando tonality es alto fret no pasa por los trastes bajos...
 			frets[fret] = scale.pattern[t];
-			//System.out.print(fret+" ");
+			System.out.print(fret+" "+scale.pattern.length+" "+fret+"\n");
 		}
 		}
 	}

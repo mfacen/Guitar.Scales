@@ -3,7 +3,7 @@ package resources;
 public class Escala {
 	public String scaleName;
 	public String literal;  // example '2212221"
-	int[] pattern = new int[31];
+	int[] pattern = new int[50];
 	static int exeMultiplier;
 	Escala (String name, String literal ){
 		this.scaleName = name;
@@ -11,7 +11,7 @@ public class Escala {
 		//System.out.println(name+" "+literal);
 
 		int sum = 0;
-		for (int g=0; g<29; g++){
+		for (int g=0; g<49; g++){
 
 			this.pattern[g] = sum;
 
