@@ -167,7 +167,11 @@ class Diapason extends JPanel{									//CLASE DIAPASON
 
 	public int fretPosition( int fret){
 		float length = 400;
-		float position =  (float) (    this.guitarScalesUI.X_OFFSET +       length - ( length / Math.pow( 2 , (fret / 12))));
+		float position = 
+			 (float) (    this.guitarScalesUI.X_OFFSET + 
+			 		      length - 
+						  ( length / Math.pow( 2 , (fret / 12)))
+					  );
 		return (int) position;
 
 
